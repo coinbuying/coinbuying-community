@@ -1,0 +1,12 @@
+DROP TABLE IF EXISTS board; -- board 테이블이 존재할 경우 DROP
+
+CREATE TABLE IF NOT EXISTS board ( -- board 테이블이 없을 경우 테이블 생성
+    boardId INT(20) AUTO_INCREMENT PRIMARY KEY NOT NULL COMMENT '게시판',
+    boardType VARCHAR(10) NOT NULL COMMENT '게시판타입',
+    title VARCHAR(50) NOT NULL COMMENT '타이틀',
+    contents VARCHAR(50) NOT NULL COMMENT '컨텐츠',
+    writer VARCHAR(50) NOT NULL COMMENT '작성자',
+    counter INT(20) NOT NULL COMMENT '조회수',
+    createDt DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '생성일',
+    updateDt DATETIME ON UPDATE CURRENT_TIMESTAMP COMMENT '수정일'
+);
