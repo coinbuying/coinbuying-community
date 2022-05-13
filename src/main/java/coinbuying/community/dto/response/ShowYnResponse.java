@@ -11,10 +11,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class ContentResponse extends SuccessResponse{
+public class ShowYnResponse extends SuccessResponse{
     private int postId;
-    private BoardType boardType;
-    private PostType postType;
-    private String title;
-    private String content;
+    private String showYn;
 }

@@ -9,9 +9,17 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public enum BoardType {
     NOTICE("NOTICE", "공지사항"),
-    REPORT("REPORT", "리포트"),
-    OPINION("OPINION", "오피니언");
+    REPORT("REPORT", "리포트");
 
     private String name;
     private String description;
+
+    public static BoardType getBoardType(String boardType){
+
+        if("NOTICE".equals(boardType)){
+            return BoardType.NOTICE;
+        }else{
+            return BoardType.REPORT;
+        }
+    }
 }
