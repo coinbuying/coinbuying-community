@@ -4,8 +4,10 @@ import coinbuying.community.dto.response.PostOne;
 import coinbuying.community.entity.BoardType;
 import coinbuying.community.entity.Post;
 import coinbuying.community.entity.PostType;
+import org.springframework.data.domain.Page;
 import org.springframework.data.r2dbc.repository.R2dbcRepository;
 import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
 
 import java.awt.print.Pageable;
 
@@ -13,8 +15,10 @@ import java.awt.print.Pageable;
 public interface PostRepository extends R2dbcRepository<Post, Integer>  {
 
 
-    Flux<PostOne> findByBoardTypeOrderByPostId(BoardType boardType, Pageable pageable);
-    Flux<PostOne> findByBoardTypeAndPostTypeOrderByPostId(BoardType boardType, PostType postType, Pageable pageable);
+    //Page<PostOne> findByAll(Pageable pageable);
+    Mono<Post> findByPostId(int postId);
+    Flux<PostOne> findByBoardTypeOrderByPostId(BoardType boardType);
+    Flux<PostOne> findByBoardTypeAndPostTypeOrderByPostId(BoardType boardType, PostType postType);
 
 
     //private final R2dbcEntityTemplate template;

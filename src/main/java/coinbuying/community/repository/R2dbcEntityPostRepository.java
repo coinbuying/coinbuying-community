@@ -8,11 +8,13 @@ import org.springframework.data.r2dbc.core.R2dbcEntityTemplate;
 import org.springframework.data.relational.core.query.Query;
 import org.springframework.stereotype.Component;
 import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
 
 
 import static org.springframework.data.domain.Sort.Order.asc;
 import static org.springframework.data.domain.Sort.Order.desc;
 import static org.springframework.data.domain.Sort.by;
+import static org.springframework.data.relational.core.query.Criteria.from;
 import static org.springframework.data.relational.core.query.Criteria.where;
 
 @RequiredArgsConstructor
@@ -38,9 +40,17 @@ public class R2dbcEntityPostRepository{
                         .sort(by(asc("post_id"))).limit(limit).offset(offset))
                 .all();
 
-
-
     }
+
+
+    /*public Mono<Integer> countByBoardTypeOrderByPostId(BoardType boardType){
+        return this.template.count().select(Post.class)
+                .from("post")
+                .matching(Query.query(where("show_yn").is("Y").and(where("board_type").is(boardType)))
+                        .sort(by(asc("post_id"))))
+                .all());
+
+    }*/
 
 
     public Flux<Post> findByBoardTypeAndPostTypeOrderByPostId(int offset, int limit){

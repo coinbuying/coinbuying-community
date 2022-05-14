@@ -2,8 +2,8 @@ DROP TABLE IF EXISTS post;
 
 CREATE TABLE IF NOT EXISTS post (
     post_id INT(20) AUTO_INCREMENT PRIMARY KEY NOT NULL COMMENT '게시글ID',
-    board_type VARCHAR(10) NOT NULL COMMENT '게시판타입',
-    post_type VARCHAR(10) NOT NULL COMMENT '게시글타입',
+    board_type VARCHAR(50) NOT NULL COMMENT '게시판타입',
+    post_type VARCHAR(50) NOT NULL COMMENT '게시글타입',
     title VARCHAR(50) NOT NULL COMMENT '타이틀',
     contents VARCHAR(2000) NOT NULL COMMENT '컨텐츠',
     writer VARCHAR(50) NOT NULL COMMENT '작성자',

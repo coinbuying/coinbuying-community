@@ -99,24 +99,29 @@ public class PostServiceImpl implements PostService {
     @Override
     public Flux<PostOne> getFavorites(ServerRequest request){
 
-        return r2dbcEntityPostRepository.findFavorites(0,5)
-                .map(p->{
-                    return new PostOne(p.getPostId(), p.getBoardType(), p.getPostType(), p.getTitle(), p.getContents(), p.getWriter(), LocalDateTime.now());
-                });
+        PostResponse pr = new PostResponse();
+        List<PostOne> lp = new ArrayList<PostOne>();
+        return null;/*r2dbcEntityPostRepository.findFavorites(0,5)
+                .flatMap(p->{
+                    return PostResponse.createPosts(lp, new PostOne(p.getPostId(), p.getBoardType(), p.getPostType(), p.getTitle(), p.getContents(), p.getWriter(), LocalDateTime.now()));
+                }).flatMap(m->{
+
+                    pr.setPosts(m);
+                    return pr;
+                });*/
     }
 
     @Override
     public Mono<Post> postsModify(ServerRequest request) {
-         request.bodyToMono(PostsModifyRequest.class).flatMap(
+          return request.bodyToMono(PostsModifyRequest.class).flatMap(
                 req -> {
-                     return postRepository.findById(req.getPostId())
+                   return postRepository.findById(req.getPostId())
                             .map(p -> {
-                                 return postRepository.save(p.modifyPost(p, req)).subscribe();
+                                p.modifyPost(p, req);
+                                postRepository.save(p);
+                                return p;
                             }).switchIfEmpty(Mono.error(new CustomException(ErrorCode.FAIL_POSTS_MODIFY)));
-
                 });
-
-        return null;
     }
 
     @Override
