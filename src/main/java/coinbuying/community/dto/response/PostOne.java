@@ -7,14 +7,19 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDateTime;
+
+
 @Getter
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class ContentResponse extends SuccessResponse{
+public class PostOne{
     private int postId;
     private BoardType boardType;
     private PostType postType;
     private String title;
     private String content;
+    private String writer;
+    private LocalDateTime createDt;
 }
