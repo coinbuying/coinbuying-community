@@ -4,6 +4,8 @@ import coinbuying.community.dto.response.*;
 import coinbuying.community.entity.Post;
 import coinbuying.community.service.PostService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -63,7 +65,7 @@ public class PostHandler {
 
     public Mono<ServerResponse> getPostsByBoardType(ServerRequest request) {
 
-        Flux<PostOne> response = postService.getPostsByBoardType(request)
+        Mono<PostResponse> response = postService.getPostsByBoardType(request)
                 .subscribeOn(Schedulers.boundedElastic());
 
         return ok()
@@ -72,8 +74,8 @@ public class PostHandler {
     }
 
     public Mono<ServerResponse> getPostsByBoardTypeAndPostType(ServerRequest request) {
-        //작업 중
-        Flux<PostOne> response = postService.getPostsByBoardTypeAndPostType(request)
+
+        Mono<PostResponse> response = postService.getPostsByBoardTypeAndPostType(request)
                 .subscribeOn(Schedulers.boundedElastic());
 
         return ok()
@@ -83,12 +85,14 @@ public class PostHandler {
 
     public Mono<ServerResponse> getFavorites(ServerRequest request) {
 
-        Flux<PostOne> response = postService.getFavorites(request)
+
+
+        Mono<PostResponse> response = postService.getFavorites(request)
                 .subscribeOn(Schedulers.boundedElastic());
 
         return ok()
                 .contentType(MediaType.APPLICATION_JSON)
-                .body(response, ContentResponse.class);
+                .body(response, PostResponse.class);
     }
 
     public Mono<ServerResponse> downloadFile(ServerRequest request) {
@@ -100,6 +104,7 @@ public class PostHandler {
                 .contentType(MediaType.APPLICATION_JSON)
                 .body(response, ContentResponse.class);
     }
+
 
 
 }

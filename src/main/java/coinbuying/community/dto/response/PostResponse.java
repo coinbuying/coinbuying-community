@@ -2,20 +2,25 @@ package coinbuying.community.dto.response;
 
 import lombok.Getter;
 import lombok.Setter;
-import reactor.core.publisher.Flux;
 
 import java.util.List;
 
 @Getter
 @Setter
 public class PostResponse {
-    private int offset;
+    private int page;
     private int limit;
-    private int totalCount;
+    private Long totalCount;
     private List<PostOne> posts;
 
-    public static List<PostOne> createPosts(List<PostOne> lp, PostOne po){
-        lp.add(po);
-        return lp;
+    public static PostResponse createPostResponse(int page, int limit, Long totalCount, List<PostOne> po){
+
+        PostResponse pr = new PostResponse();
+        pr.setPage(page);
+        pr.setLimit(limit);
+        pr.setTotalCount(totalCount);
+        pr.setPosts(po);
+
+        return pr;
     }
 }

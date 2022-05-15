@@ -2,6 +2,7 @@ package coinbuying.community.repository;
 
 import coinbuying.community.entity.BoardType;
 import coinbuying.community.entity.Post;
+import coinbuying.community.entity.PostType;
 import lombok.RequiredArgsConstructor;
 
 import org.springframework.data.r2dbc.core.R2dbcEntityTemplate;
@@ -53,10 +54,10 @@ public class R2dbcEntityPostRepository{
     }*/
 
 
-    public Flux<Post> findByBoardTypeAndPostTypeOrderByPostId(int offset, int limit){
+    public Flux<Post> findByBoardTypeAndPostTypeOrderByPostId(BoardType boardType, PostType postType, int offset, int limit){
         return this.template.select(Post.class)
                 .from("post")
-                .matching(Query.query(where("show_yn").is("Y"))
+                .matching(Query.query(where("show_yn").is("Y").and(where("board_type").is(boardType)).and(where("post_type").is(postType)))
                         .sort(by(asc("post_id"))).limit(limit).offset(offset))
                 .all();
 

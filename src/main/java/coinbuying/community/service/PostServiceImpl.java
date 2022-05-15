@@ -58,28 +58,43 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
-    public Flux<PostOne> getPostsByBoardType(ServerRequest request) {
-        //List<PostOne> posts = new ArrayList<PostOne>();
-        int page = Integer.parseInt(String.valueOf(request.queryParam("page")));
-        int size = Integer.parseInt(String.valueOf(request.queryParam("size")));
-        //PageRequest pageRequest = PageRequest.of(page,size);
-        //r2dbcEntityPostRepository.countByBoardTypeOrderByPostId(BoardType.getBoardType(request.pathVariable("boardType")),)
-        return r2dbcEntityPostRepository.findByBoardTypeOrderByPostId(BoardType.getBoardType(request.pathVariable("boardType")), page+1, size)
-                .map(m -> {
-                    //new PageImpl<>(m.getT1(), pageRequest, m.getT2());
-                    return new PostOne( m.getPostId(), m.getBoardType(), m.getPostType(), m.getTitle(), m.getContents(), m.getWriter(), m.getCreateDt());
+    public Mono<PostResponse> getPostsByBoardType(ServerRequest request) {
+
+        int page = Integer.parseInt(request.queryParam("page").orElse("1"));
+        int limit = Integer.parseInt(request.queryParam("limit").orElse("5"));
+        int offset = (page-1) * limit;
+        BoardType boardType = BoardType.getBoardType(request.pathVariable("boardType"));
+
+        return r2dbcEntityPostRepository.findByBoardTypeOrderByPostId(boardType, offset, limit)
+                .map(p->{
+                    return new PostOne(p.getPostId(), p.getBoardType(), p.getPostType(), p.getTitle(), p.getContents(), p.getWriter(), LocalDateTime.now());
+                }).collectList().map(
+                        po -> PostResponse.createPostResponse(page,limit,0L,po)
+                ).map(postResponse -> {
+                    postResponse.setTotalCount(20L);
+                    return postResponse;
                 });
     }
 
     @Override
-    public Flux<PostOne> getPostsByBoardTypeAndPostType(ServerRequest request) {
+    public Mono<PostResponse> getPostsByBoardTypeAndPostType(ServerRequest request) {
 
+        int page = Integer.parseInt(request.queryParam("page").orElse("1"));
+        int limit = Integer.parseInt(request.queryParam("limit").orElse("5"));
+        int offset = (page-1) * limit;
 
-        return null;/*postRepository.findByBoardTypeAndPostTypeOrderByPostId(BoardType.getBoardType(request.pathVariable("boardType")), PostType.getPostType(request.pathVariable("postType")))
-                .map(m ->
-                        new PostResponse( m.getPostId(), m.getBoardType(), m.getPostType(), m.getTitle(), m.getContents(), m.getWriter(), m.getCreateDt())
-                );*/
+        BoardType boardType = BoardType.getBoardType(request.pathVariable("boardType"));
+        PostType postType = PostType.getPostType(request.pathVariable("postType"));
 
+        return r2dbcEntityPostRepository.findByBoardTypeAndPostTypeOrderByPostId(boardType, postType, offset,limit)
+                .map(p->{
+                    return new PostOne(p.getPostId(), p.getBoardType(), p.getPostType(), p.getTitle(), p.getContents(), p.getWriter(), LocalDateTime.now());
+                }).collectList().map(
+                        po -> PostResponse.createPostResponse(page,limit,0L,po)
+                ).map(postResponse -> {
+                    postResponse.setTotalCount(20L);
+                    return postResponse;
+                });
     }
 
     @Override
@@ -97,18 +112,20 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
-    public Flux<PostOne> getFavorites(ServerRequest request){
+    public Mono<PostResponse> getFavorites(ServerRequest request){
+        int page = Integer.parseInt(request.queryParam("page").orElse("1"));
+        int limit = Integer.parseInt(request.queryParam("limit").orElse("5"));
+        int offset = (page-1) * limit;
 
-        PostResponse pr = new PostResponse();
-        List<PostOne> lp = new ArrayList<PostOne>();
-        return null;/*r2dbcEntityPostRepository.findFavorites(0,5)
-                .flatMap(p->{
-                    return PostResponse.createPosts(lp, new PostOne(p.getPostId(), p.getBoardType(), p.getPostType(), p.getTitle(), p.getContents(), p.getWriter(), LocalDateTime.now()));
-                }).flatMap(m->{
-
-                    pr.setPosts(m);
-                    return pr;
-                });*/
+        return r2dbcEntityPostRepository.findFavorites(offset,limit)
+                .map(p->{
+                    return new PostOne(p.getPostId(), p.getBoardType(), p.getPostType(), p.getTitle(), p.getContents(), p.getWriter(), LocalDateTime.now());
+                }).collectList().map(
+                        po -> PostResponse.createPostResponse(page,limit,0L,po)
+                ).map(postResponse -> {
+                    postResponse.setTotalCount(20L);
+                    return postResponse;
+                });
     }
 
     @Override
@@ -144,6 +161,4 @@ public class PostServiceImpl implements PostService {
 
                 });
     }
-
-
 }
