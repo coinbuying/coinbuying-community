@@ -53,11 +53,6 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
-    public Mono<ContentResponse> downloadFile(int postId) {
-        return null;
-    }
-
-    @Override
     public Mono<PostResponse> getPostsByBoardType(ServerRequest request) {
 
         int page = Integer.parseInt(request.queryParam("page").orElse("1"));
