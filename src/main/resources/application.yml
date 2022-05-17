@@ -13,10 +13,10 @@ spring:
 
 eureka:
   client:
-    register-with-eureka: true
-    fetch-registry: true
     service-url:
-      defaultZone: http://localhost:8761/eureka
+      defualtZone: http://52.53.225.72:8761/eureka/
+    register-with-eureka: false
+    fetch-registry: false
 
 logging:
   level:
@@ -26,5 +26,5 @@ logging:
 msa:
   client:
     url:
-      gateway: http://localhost:8000
+      gateway: http://54.215.253.43:8000
 
